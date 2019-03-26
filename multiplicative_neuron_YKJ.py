@@ -52,8 +52,10 @@ if __name__ == "__main__":
     
     ins = tf.placeholder(tf.float32, (None,2))
     targets  = tf.placeholder(tf.float32, (None,1))
-    outs = mul_YKJ(ins,1)#, bias_regularizer=tf.contrib.layers.l2_regularizer(0.01))
-    
+    #outs = mul_YKJ(ins,1)#, bias_regularizer=tf.contrib.layers.l2_regularizer(0.01))
+	plusminusone_regularizer = (lambda b: 0.001*tf.reduce_mean(tf.pow(tf.abs(b)-1,2)))
+    outs = mul_YKJ(ins,1, bias_regularizer=plusminusone_regularizer)
+	
     deviation = outs-targets
     print("DEVIATION SHAPE: %s" % str(deviation.shape.as_list()))
     loss_comps = deviation/(tf.abs(targets)+0.5)
