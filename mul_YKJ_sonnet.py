@@ -26,16 +26,10 @@ class Mul_YKJ(snt.AbstractModule):
         #print("INPUT SIZE: %d" % input_size)
         
         #Weights
-        W = tf.Variable(self.weight_initializer((self.output_size, input_size)))
-        if self.weight_regularizer != None:
-            weight_reg = self.weight_regularizer(W)
-            tf.add_to_collection(tf.GraphKeys.REGULARIZATION_LOSSES, weight_reg)
+        W = tf.get_variable(self.module_name+"W", (self.output_size, input_size), tf.float32, self.weight_initializer, self.weight_regularizer)
         
         #Biases
-        B = tf.Variable(self.bias_initializer((self.output_size, input_size)))
-        if self.bias_regularizer != None:
-            bias_reg = self.bias_regularizer(B)
-            tf.add_to_collection(tf.GraphKeys.REGULARIZATION_LOSSES, bias_reg)
+        B = tf.get_variable(self.module_name+"B", (self.output_size, input_size), tf.float32, self.bias_initializer, self.bias_regularizer)
         
         rows = W*inputs + B
         #print("ROWS SIZE: %s" % str(rows.shape.as_list()))
